@@ -1,6 +1,6 @@
 /*! http://keith-wood.name/countdown.html
-	Countdown for jQuery v2.1.0.
-	Written by Keith Wood (wood.keith{at}optusnet.com.au) January 2008.
+	Countdown for jQuery v2.1.1.
+	Written by Keith Wood (kbwood.au{at}gmail.com) January 2008.
 	Available under the MIT (http://keith-wood.name/licence.html) license. 
 	Please attribute the author if you use it. */
 
@@ -16,6 +16,18 @@
 	var H = 4; // Hours
 	var M = 5; // Minutes
 	var S = 6; // Seconds
+
+	var isFunction = $.isFunction ||
+		function isFunction(obj) {
+		// Support: Chrome <=57, Firefox <=52
+		// In some browsers, typeof returns "function" for HTML <object> elements
+		// (i.e., `typeof document.createElement( "object" ) === "function"`).
+		// We don't want to classify *any* DOM node as a function.
+		// Support: QtWeb <=3.8.5, WebKit <=534.34, wkhtmltopdf tool <=0.12.5
+		// Plus for old WebKit, typeof returns "function" for HTML collections
+		// (e.g., `typeof document.getElementsByTagName("div") === "function"`). (gh-4756)
+		return typeof obj === 'function' && typeof obj.nodeType !== 'number' && typeof obj.item !== 'function';
+	};
 
 	/** Create the countdown plugin.
 		<p>Sets an element to show the time remaining until a given instant.</p>
@@ -320,7 +332,7 @@ $.countdown.UTCDate(-7, new Date(2013, 12-1, 25, 12, 0)) */
 						}
 					}
 					if (self._eqNull(serverSync[2])) { // Recalculate if missing
-						var serverResult = ($.isFunction(inst.options.serverSync) ?
+						var serverResult = (isFunction(inst.options.serverSync) ?
 							inst.options.serverSync.apply(this, []) : null);
 						serverSync[2] =
 							(serverResult ? new Date().getTime() - serverResult.getTime() : 0) - serverSync[1];
@@ -403,7 +415,7 @@ $.countdown.UTCDate(-7, new Date(2013, 12-1, 25, 12, 0)) */
 				return;
 			}
 			elem.html(this._generateHTML(inst)).toggleClass(this._rtlClass, inst.options.isRTL);
-			if (inst._hold !== 'pause' && $.isFunction(inst.options.onTick)) {
+			if (inst._hold !== 'pause' && isFunction(inst.options.onTick)) {
 				var periods = inst._hold !== 'lap' ? inst._periods :
 					this._calculatePeriods(inst, inst._show, inst.options.significant, new Date());
 				if (inst.options.tickInterval === 1 ||
@@ -418,7 +430,7 @@ $.countdown.UTCDate(-7, new Date(2013, 12-1, 25, 12, 0)) */
 				inst._expiring = true;
 				if (this._hasElem(elem[0]) || inst.options.alwaysExpire) {
 					this._removeElem(elem[0]);
-					if ($.isFunction(inst.options.onExpiry)) {
+					if (isFunction(inst.options.onExpiry)) {
 						inst.options.onExpiry.apply(elem[0], []);
 					}
 					if (inst.options.expiryText) {
@@ -485,7 +497,7 @@ $.countdown.UTCDate(-7, new Date(2013, 12-1, 25, 12, 0)) */
 				serverOffset = (inst.options.serverSync ? serverEntry : 0);
 			}
 			else {
-				var serverResult = ($.isFunction(inst.options.serverSync) ?
+				var serverResult = (isFunction(inst.options.serverSync) ?
 					inst.options.serverSync.apply(elem[0], []) : null);
 				now = new Date();
 				serverOffset = (serverResult ? now.getTime() - serverResult.getTime() : 0);

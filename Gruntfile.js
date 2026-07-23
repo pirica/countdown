@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 				replacements: [
 					{
 						from: /bower_components\/jquery\/dist\/jquery.min.js/,
-						to: 'http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
+						to: 'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 					},
 					{
 						from: /bower_components\/kbw-plugin\/dist\/js\/jquery.plugin.min.js/,
